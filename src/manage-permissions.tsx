@@ -12,12 +12,7 @@ export default function ManagePermissions() {
 
   if (!device) return <DevicePicker onSelect={setDevice} />;
 
-  return (
-    <AppList
-      device={device}
-      onAppSelect={(app) => push(<PermissionList device={device} app={app} />)}
-    />
-  );
+  return <AppList device={device} onAppSelect={(app) => push(<PermissionList device={device} app={app} />)} />;
 }
 
 function PermissionList({ device, app }: { device: Device; app: App }) {
