@@ -32,10 +32,10 @@ function BatteryForm({ device }: { device: Device }) {
       toast.style = Toast.Style.Success;
       toast.title = `Battery set to ${level}%`;
       pop();
-    } catch (e: any) {
+    } catch (e: unknown) {
       toast.style = Toast.Style.Failure;
       toast.title = "Failed";
-      toast.message = e.message;
+      toast.message = e instanceof Error ? e.message : String(e);
     }
   }
 
@@ -46,10 +46,10 @@ function BatteryForm({ device }: { device: Device }) {
       toast.style = Toast.Style.Success;
       toast.title = "Battery Reset";
       pop();
-    } catch (e: any) {
+    } catch (e: unknown) {
       toast.style = Toast.Style.Failure;
       toast.title = "Failed";
-      toast.message = e.message;
+      toast.message = e instanceof Error ? e.message : String(e);
     }
   }
 

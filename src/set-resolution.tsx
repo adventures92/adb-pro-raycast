@@ -22,10 +22,10 @@ function ResolutionList({ device }: { device: Device }) {
       if (density) await adb.setDensity(device.id, density);
       toast.style = Toast.Style.Success;
       toast.title = "Display Updated";
-    } catch (e: any) {
+    } catch (e: unknown) {
       toast.style = Toast.Style.Failure;
       toast.title = "Failed";
-      toast.message = e.message;
+      toast.message = e instanceof Error ? e.message : String(e);
     }
   }
 
@@ -35,10 +35,10 @@ function ResolutionList({ device }: { device: Device }) {
       await adb.resetDisplay(device.id);
       toast.style = Toast.Style.Success;
       toast.title = "Display Reset";
-    } catch (e: any) {
+    } catch (e: unknown) {
       toast.style = Toast.Style.Failure;
       toast.title = "Failed";
-      toast.message = e.message;
+      toast.message = e instanceof Error ? e.message : String(e);
     }
   }
 

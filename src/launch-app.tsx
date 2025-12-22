@@ -1,4 +1,4 @@
-import { Action, Icon, showToast, Toast, useNavigation } from "@raycast/api";
+import { Action, Icon, showToast, Toast } from "@raycast/api";
 import { useState } from "react";
 import { AppList } from "./components/AppList";
 import { DevicePicker } from "./components/DevicePicker";
@@ -26,10 +26,10 @@ export default function LaunchApp() {
                 await appService.launchApp(device.id, app.package);
                 toast.style = Toast.Style.Success;
                 toast.title = "Launched";
-              } catch (e: any) {
+              } catch (e: unknown) {
                 toast.style = Toast.Style.Failure;
                 toast.title = "Failed";
-                toast.message = e.message;
+                toast.message = e instanceof Error ? e.message : String(e);
               }
             }}
           />

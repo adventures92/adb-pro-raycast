@@ -12,10 +12,10 @@ export default function LaunchEmulator() {
       toast.style = Toast.Style.Success;
       toast.title = "Emulator Started";
       toast.message = "Give it a moment to boot up.";
-    } catch (e: any) {
+    } catch (e: unknown) {
       toast.style = Toast.Style.Failure;
       toast.title = "Failed";
-      toast.message = e.message;
+      toast.message = e instanceof Error ? e.message : String(e);
     }
   }
 

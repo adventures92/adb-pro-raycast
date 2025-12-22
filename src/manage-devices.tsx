@@ -1,7 +1,6 @@
-import { Action, ActionPanel, Color, Icon, List, useNavigation } from "@raycast/api";
+import { Action, ActionPanel, Color, Icon, List } from "@raycast/api";
 import { usePromise } from "@raycast/utils";
 import { adb } from "./services/adb";
-import { Device } from "./types";
 import DeviceActions from "./components/DeviceActions";
 import { SetupWizard } from "./components/SetupWizard";
 import { checkAdbPath } from "./services/environment";

@@ -32,10 +32,10 @@ function InstallForm({ device }: { device: Device }) {
       toast.style = Toast.Style.Success;
       toast.title = "Install Successful";
       pop();
-    } catch (e: any) {
+    } catch (e: unknown) {
       toast.style = Toast.Style.Failure;
       toast.title = "Install Failed";
-      toast.message = e.message;
+      toast.message = e instanceof Error ? e.message : String(e);
     } finally {
       setLoading(false);
     }

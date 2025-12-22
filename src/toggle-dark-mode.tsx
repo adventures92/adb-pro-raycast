@@ -36,10 +36,10 @@ function DarkModeControl({ device }: { device: Device }) {
       toast.style = Toast.Style.Success;
       toast.title = enable ? "Dark Mode Enabled" : "Light Mode Enabled";
       revalidate();
-    } catch (e: any) {
+    } catch (e: unknown) {
       toast.style = Toast.Style.Failure;
       toast.title = "Failed";
-      toast.message = e.message;
+      toast.message = e instanceof Error ? e.message : String(e);
     }
   }
 

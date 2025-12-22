@@ -1,4 +1,4 @@
-import { Action, ActionPanel, Detail, Icon, useNavigation } from "@raycast/api";
+import { Action, ActionPanel, Detail, Icon } from "@raycast/api";
 import { useEffect, useState } from "react";
 import { checkAdbPath } from "./services/environment";
 import { SetupWizard } from "./components/SetupWizard";

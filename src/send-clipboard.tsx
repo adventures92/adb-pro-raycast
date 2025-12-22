@@ -22,10 +22,10 @@ export default function SendClipboard() {
       toast.style = Toast.Style.Success;
       toast.title = "Text Sent";
       toast.message = `Typed "${text.substring(0, 20)}${text.length > 20 ? "..." : ""}"`;
-    } catch (e: any) {
+    } catch (e: unknown) {
       toast.style = Toast.Style.Failure;
       toast.title = "Failed";
-      toast.message = e.message;
+      toast.message = e instanceof Error ? e.message : String(e);
     }
   }
 
