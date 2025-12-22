@@ -158,7 +158,7 @@ class AdbService {
   async listAVDs(): Promise<string[]> {
     try {
       const emulator = await this.getEmulator();
-      const output = await this.exec(`-s emulator-5554 shell echo "ignore" && "${emulator}" -list-avds`);
+      await this.exec(`-s emulator-5554 shell echo "ignore" && "${emulator}" -list-avds`);
       // Fallback to searching basic paths if command above fails or weirdness.
       // Actually, 'emulator' might not be in path for exec, we need full path usually.
       // But for now let's hope it's in path or we use the specific path.
