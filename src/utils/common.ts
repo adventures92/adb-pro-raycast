@@ -19,6 +19,7 @@ export const parseDeviceList = (stdout: string): import("../types").Device[] => 
 
       return {
         id,
+        type: (state as any) || "device",
         state: state || "unknown",
         model: modelPart ? modelPart.split(":")[1] : "Unknown Model",
         product: productPart ? productPart.split(":")[1] : "",

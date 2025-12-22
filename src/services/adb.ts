@@ -54,9 +54,12 @@ class AdbService {
           return {
             id,
             type,
+            state: type,
             model: modelPart,
             product: productPart,
+            device: parts.find((p) => p.startsWith("device:"))?.split(":")[1] || "Unknown",
             transportId: transportPart,
+            isWifi: id.includes(":") || id.startsWith("192.168"),
           };
         });
     } catch (error) {
