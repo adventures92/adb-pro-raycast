@@ -1,0 +1,211 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Raycast: Develop Extension",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "dev"
+            ]
+        },
+        {
+            "name": "Command: Manage Devices",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": [
+                "ray",
+                "develop",
+                "-c",
+                "manage-devices"
+            ]
+        },
+        {
+            "name": "Command: View Logcat",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": [
+                "ray",
+                "develop",
+                "-c",
+                "view-logcat"
+            ]
+        },
+        {
+            "name": "Command: Wireless Wizard",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": [
+                "ray",
+                "develop",
+                "-c",
+                "wireless-connect"
+            ]
+        },
+        {
+            "name": "Command: Simulate Keys",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": [
+                "ray",
+                "develop",
+                "-c",
+                "simulate-keys"
+            ]
+        },
+        {
+            "name": "Command: Manage Permissions",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": [
+                "ray",
+                "develop",
+                "-c",
+                "manage-permissions"
+            ]
+        },
+        {
+            "name": "Command: Launch App",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": [
+                "ray",
+                "develop",
+                "-c",
+                "launch-app"
+            ]
+        },
+        {
+            "name": "Command: Uninstall App",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": [
+                "ray",
+                "develop",
+                "-c",
+                "uninstall-app"
+            ]
+        },
+        {
+            "name": "Command: Clear App Data",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": [
+                "ray",
+                "develop",
+                "-c",
+                "clear-data"
+            ]
+        },
+        {
+            "name": "Command: Firebase Debug",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": [
+                "ray",
+                "develop",
+                "-c",
+                "firebase-debug"
+            ]
+        },
+        {
+            "name": "Command: Simulate Battery",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": [
+                "ray",
+                "develop",
+                "-c",
+                "simulate-battery"
+            ]
+        },
+        {
+            "name": "Command: Change Resolution",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": [
+                "ray",
+                "develop",
+                "-c",
+                "set-resolution"
+            ]
+        },
+        {
+            "name": "Command: Benchmark Start",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": [
+                "ray",
+                "develop",
+                "-c",
+                "benchmark-start"
+            ]
+        },
+        {
+            "name": "Command: Mirror Screen",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": [
+                "ray",
+                "develop",
+                "-c",
+                "mirror-screen"
+            ]
+        },
+        {
+            "name": "Command: Set Proxy",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": [
+                "ray",
+                "develop",
+                "-c",
+                "set-proxy"
+            ]
+        },
+        {
+            "name": "Command: Check ADB",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": [
+                "ray",
+                "develop",
+                "-c",
+                "check-adb"
+            ]
+        }
+    ]
+}
