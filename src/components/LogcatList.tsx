@@ -1,7 +1,7 @@
 import { ActionPanel, Action, List, Icon, Color, useNavigation } from "@raycast/api";
 import React, { useState, useMemo, useCallback } from "react";
 import { Device, App } from "../types";
-import { useLogcat } from "../hooks/useLogcat";
+import { useLogcat, LogEntry } from "../hooks/useLogcat";
 import { AppList } from "./AppList";
 
 export function LogcatList({ device, initialApp }: { device: Device; initialApp: App | null }) {
@@ -111,7 +111,7 @@ const LogItem = React.memo(function LogItem({
   selectApp,
   setSelectedApp,
 }: {
-  log: any;
+  log: LogEntry;
   selectedApp: App | null;
   clearLogs: () => void;
   selectApp: () => void;

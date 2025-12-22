@@ -12,12 +12,7 @@ export default function ManagePermissions() {
 
   if (!device) return <DevicePicker onSelect={setDevice} />;
 
-  return (
-    <AppList
-      device={device}
-      onAppSelect={(app) => push(<PermissionList device={device} app={app} />)}
-    />
-  );
+  return <AppList device={device} onAppSelect={(app) => push(<PermissionList device={device} app={app} />)} />;
 }
 
 function PermissionList({ device, app }: { device: Device; app: App }) {
@@ -38,10 +33,10 @@ function PermissionList({ device, app }: { device: Device; app: App }) {
       toast.style = Toast.Style.Success;
       toast.title = "Success";
       revalidate();
-    } catch (e: any) {
+    } catch (e: unknown) {
       toast.style = Toast.Style.Failure;
       toast.title = "Failed";
-      toast.message = e.message;
+      toast.message = e instanceof Error ? e.message : String(e);
     }
   }
 

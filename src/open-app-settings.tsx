@@ -26,10 +26,10 @@ export default function OpenAppSettings() {
                 await appService.openAppInfo(device.id, app.package);
                 toast.style = Toast.Style.Success;
                 toast.title = "Opened";
-              } catch (e: any) {
+              } catch (e: unknown) {
                 toast.style = Toast.Style.Failure;
                 toast.title = "Failed";
-                toast.message = e.message;
+                toast.message = e instanceof Error ? e.message : String(e);
               }
             }}
           />

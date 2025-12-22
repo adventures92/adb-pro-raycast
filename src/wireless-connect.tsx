@@ -8,7 +8,7 @@ export default function WirelessConnect() {
   // 1. Switch existing USB device to TCP/IP
   // 2. Connect to known IP
 
-  const { data: devices, isLoading, revalidate } = usePromise(() => adb.listDevices());
+  const { data: devices, isLoading } = usePromise(() => adb.listDevices());
   const usbDevices = devices?.filter((d) => !d.id.includes(".") && !d.id.includes(":")) || []; // Simple heuristic for USB
 
   return (
@@ -78,10 +78,10 @@ export function SwitchToWifi({ device }: { device: Device }) {
         toast.message = "Unplug and use 'Connect via IP'.";
       }
       pop();
-    } catch (e: any) {
+    } catch (e: unknown) {
       toast.style = Toast.Style.Failure;
       toast.title = "Failed";
-      toast.message = e.message;
+      toast.message = e instanceof Error ? e.message : String(e);
     }
   }
 
@@ -116,10 +116,10 @@ export function ConnectIpForm() {
       } else {
         throw new Error(res);
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
       toast.style = Toast.Style.Failure;
       toast.title = "Connection Failed";
-      toast.message = e.message;
+      toast.message = e instanceof Error ? e.message : String(e);
     }
   }
 

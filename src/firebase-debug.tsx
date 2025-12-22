@@ -30,10 +30,10 @@ function DebugControl({ device, app }: { device: Device; app: App }) {
       toast.style = Toast.Style.Success;
       toast.title = enable ? "Debug Mode Enabled" : "Debug Mode Disabled";
       toast.message = enable ? `Logs for ${app.name} will appear in DebugView` : "Debug logging stopped";
-    } catch (e: any) {
+    } catch (e: unknown) {
       toast.style = Toast.Style.Failure;
       toast.title = "Failed";
-      toast.message = e.message;
+      toast.message = e instanceof Error ? e.message : String(e);
     }
   }
 

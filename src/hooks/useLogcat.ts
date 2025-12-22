@@ -66,11 +66,8 @@ export function useLogcat(device: Device | null, pkg?: string) {
 
     let mounted = true;
     let buffer: LogEntry[] = [];
-    let flushInterval: NodeJS.Timeout;
-
     const start = async () => {
       try {
-        // Spawn logcat
         const child = await adb.spawnLogcat(device.id);
         infoRef.current.process = child;
 
@@ -83,32 +80,23 @@ export function useLogcat(device: Device | null, pkg?: string) {
             if (!line.trim()) return;
             const parsed = parseLogcat(line);
 
-            // Filter Logic:
-            // If pkg is provided, we MUST match a PID.
-            // If we haven't found the PID yet (targetPid is null), we filter out everything.
             if (pkg) {
               if (!infoRef.current.targetPid) return;
               if (parsed.pid !== infoRef.current.targetPid) return;
             }
 
-            buffer.unshift(parsed); // Newest first
+            buffer.unshift(parsed);
           });
         });
 
-        child.stderr?.on("data", (data) => {
-          // ignore stderr usually
-        });
-
-        child.on("close", (code) => {
-          if (mounted && code !== 0 && code !== null) {
-            // setError(`Logcat exited with code ${code}`);
-          }
+        child.stderr?.on("data", () => {
+          // ignore
         });
 
         setIsLoading(false);
-      } catch (e: any) {
+      } catch (e: unknown) {
         if (mounted) {
-          setError(e.message);
+          setError(e instanceof Error ? e.message : String(e));
           setIsLoading(false);
         }
       }
@@ -117,7 +105,7 @@ export function useLogcat(device: Device | null, pkg?: string) {
     start();
 
     // Flush buffer to state every 500ms
-    flushInterval = setInterval(() => {
+    const flushInterval = setInterval(() => {
       if (buffer.length > 0) {
         setLogs((prev) => {
           const next = [...buffer, ...prev];
@@ -151,7 +139,7 @@ function parseLogcat(line: string): LogEntry {
       timestamp: match[1],
       pid: match[2],
       tid: match[3],
-      level: match[4] as any,
+      level: match[4] as LogEntry["level"],
       tag: match[5].trim(),
       message: match[6],
       raw: line,

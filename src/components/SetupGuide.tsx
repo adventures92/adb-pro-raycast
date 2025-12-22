@@ -1,9 +1,7 @@
-import { ActionPanel, Action, Detail, Icon, useNavigation } from "@raycast/api";
-import { adbService } from "../services/adb";
-import { useState } from "react";
+import { ActionPanel, Action, Detail, Icon } from "@raycast/api";
 
 export default function SetupGuide({ onRetry }: { onRetry: () => void }) {
-  const [markdown, setMarkdown] = useState(`
+  const markdown = `
   # ADB Not Found
 
   It seems irrelevant, but **ADB (Android Debug Bridge)** is required for this extension to work.
@@ -23,7 +21,7 @@ export default function SetupGuide({ onRetry }: { onRetry: () => void }) {
   If you have ADB installed but it's not detected:
   - Add it to your system PATH.
   - Or specify the path manually below.
-  `);
+  `;
 
   return (
     <Detail

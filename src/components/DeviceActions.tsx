@@ -1,8 +1,6 @@
 import { Action, ActionPanel, Icon, useNavigation } from "@raycast/api";
 import { Device } from "../types";
 import ConnectIpForm from "./ConnectIpForm";
-import { LogcatList } from "./LogcatList";
-import setupWizard from "./SetupWizard"; // Assuming we might want to trigger setup from here too? No, setup is global.
 
 export default function DeviceActions({ device, onRefresh }: { device: Device; onRefresh: () => void }) {
   const { push } = useNavigation();

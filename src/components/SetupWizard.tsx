@@ -1,5 +1,4 @@
 import { Action, ActionPanel, Form, Icon, List, showToast, Toast, useNavigation } from "@raycast/api";
-import { useState } from "react";
 import { checkAdbPath, saveAdbPath } from "../services/environment";
 
 export function SetupWizard({ onJsonDetected }: { onJsonDetected?: () => void }) {

@@ -1,4 +1,4 @@
-import { ActionPanel, Action, List, showToast, Toast, Icon, Color } from "@raycast/api";
+import { ActionPanel, Action, List, showToast, Toast, Icon } from "@raycast/api";
 import { adb } from "./services/adb";
 import { DevicePicker } from "./components/DevicePicker";
 import { useState } from "react";
@@ -21,10 +21,10 @@ export default function MirrorScreen() {
       toast.style = Toast.Style.Success;
       toast.title = "Mirroring Started";
       toast.message = "Check for the Scrcpy window.";
-    } catch (e: any) {
+    } catch (e: unknown) {
       toast.style = Toast.Style.Failure;
       toast.title = "Failed";
-      toast.message = e.message;
+      toast.message = e instanceof Error ? e.message : String(e);
     }
   }
 

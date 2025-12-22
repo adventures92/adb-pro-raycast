@@ -21,10 +21,10 @@ function KeyGrid({ device }: { device: Device }) {
       await adb.sendKeyEvent(device.id, keycode);
       toast.style = Toast.Style.Success;
       toast.title = "Sent";
-    } catch (e: any) {
+    } catch (e: unknown) {
       toast.style = Toast.Style.Failure;
       toast.title = "Failed";
-      toast.message = e.message;
+      toast.message = e instanceof Error ? e.message : String(e);
     }
   }
 

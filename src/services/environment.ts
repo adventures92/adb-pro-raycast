@@ -2,7 +2,6 @@ import { exec } from "child_process";
 import { promisify } from "util";
 import { getPreferenceValues, LocalStorage } from "@raycast/api";
 import fs from "fs";
-import path from "path";
 import os from "os";
 
 const execAsync = promisify(exec);
@@ -44,7 +43,7 @@ export async function checkAdbPath(): Promise<string | null> {
     if (whichPath && fs.existsSync(whichPath)) {
       return whichPath;
     }
-  } catch (e) {
+  } catch {
     // ignore
   }
 

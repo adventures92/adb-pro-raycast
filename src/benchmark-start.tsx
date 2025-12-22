@@ -1,4 +1,4 @@
-import { ActionPanel, Action, List, showToast, Toast, Icon } from "@raycast/api";
+import { showToast, Toast } from "@raycast/api";
 import { adb } from "./services/adb";
 import { appService } from "./services/apps";
 import { DevicePicker } from "./components/DevicePicker";
@@ -45,9 +45,9 @@ async function runBenchmark(device: Device, app: App) {
     toast.style = Toast.Style.Success;
     toast.title = `Cold Start: ${time}ms`;
     toast.message = `${app.name}`;
-  } catch (e: any) {
+  } catch (e: unknown) {
     toast.style = Toast.Style.Failure;
     toast.title = "Benchmark Failed";
-    toast.message = e.message;
+    toast.message = e instanceof Error ? e.message : String(e);
   }
 }

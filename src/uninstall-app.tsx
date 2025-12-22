@@ -37,10 +37,10 @@ export default function UninstallApp() {
                   // Ideally we should refresh the list here, but usePromise is inside List.
                   // For now, it will require a manual refresh or we need to lift state up.
                   // Or assume it's gone.
-                } catch (e: any) {
+                } catch (e: unknown) {
                   toast.style = Toast.Style.Failure;
                   toast.title = "Failed";
-                  toast.message = e.message;
+                  toast.message = e instanceof Error ? e.message : String(e);
                 }
               }
             }}

@@ -34,10 +34,10 @@ export default function ClearData() {
                   await appService.clearData(device.id, app.package);
                   toast.style = Toast.Style.Success;
                   toast.title = "Data Cleared";
-                } catch (e: any) {
+                } catch (e: unknown) {
                   toast.style = Toast.Style.Failure;
                   toast.title = "Failed";
-                  toast.message = e.message;
+                  toast.message = e instanceof Error ? e.message : String(e);
                 }
               }
             }}

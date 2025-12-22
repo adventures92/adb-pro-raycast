@@ -29,7 +29,7 @@ class AdbService {
       // pidof is available on most Android devices
       const pid = await this.exec(`-s ${deviceId} shell pidof -s ${pkg}`);
       return pid ? pid.trim() : null;
-    } catch (e) {
+    } catch {
       return null;
     }
   }
@@ -77,8 +77,8 @@ class AdbService {
         return { success: true, message: `Connected to ${ip}:${port}` };
       }
       return { success: false, message: output };
-    } catch (e: any) {
-      return { success: false, message: e.message };
+    } catch (e: unknown) {
+      return { success: false, message: e instanceof Error ? e.message : String(e) };
     }
   }
 
@@ -87,8 +87,8 @@ class AdbService {
       await this.exec("kill-server");
       await this.exec("start-server");
       return { success: true, message: "ADB Server restarted successfully" };
-    } catch (e: any) {
-      return { success: false, message: e.message };
+    } catch (e: unknown) {
+      return { success: false, message: e instanceof Error ? e.message : String(e) };
     }
   }
   async toggleWifi(deviceId: string, enable: boolean) {
@@ -130,8 +130,9 @@ class AdbService {
 
     try {
       return await this.exec(`-s ${deviceId} shell input text "${escaped}"`);
-    } catch (e: any) {
+    } catch (e: unknown) {
       // If valid command failed, it's likely due to unsupported characters (Emojis etc)
+      // eslint-disable-next-line no-control-regex
       if (/[^\x00-\x7F]/.test(text)) {
         throw new Error("Emojis and non-ASCII characters are not supported via ADB Input.");
       }
@@ -140,9 +141,7 @@ class AdbService {
   }
   async listAVDs(): Promise<string[]> {
     try {
-      const output = await this.exec(
-        `-s emulator-5554 shell echo "ignore" && $HOME/Library/Android/sdk/emulator/emulator -list-avds`,
-      );
+      await this.exec(`-s emulator-5554 shell echo "ignore" && $HOME/Library/Android/sdk/emulator/emulator -list-avds`);
       // Fallback to searching basic paths if command above fails or weirdness.
       // Actually, 'emulator' might not be in path for exec, we need full path usually.
       // But for now let's hope it's in path or we use the specific path.
@@ -150,12 +149,12 @@ class AdbService {
       // For simplify, start with assuming 'emulator' is in path or standard location.
       const res = await this.exec(`$HOME/Library/Android/sdk/emulator/emulator -list-avds`);
       return res.split("\n").filter((l) => l.trim().length > 0);
-    } catch (e) {
+    } catch {
       // Try just 'emulator'
       try {
         const res = await this.exec(`emulator -list-avds`);
         return res.split("\n").filter((l) => l.trim().length > 0);
-      } catch (e2) {
+      } catch {
         return [];
       }
     }
@@ -255,7 +254,7 @@ class AdbService {
       // Assume it's in path or brew.
       const cmd = `scrcpy -s ${deviceId} > /dev/null 2>&1 &`;
       return await this.exec(cmd);
-    } catch (e) {
+    } catch {
       throw new Error("Could not start scrcpy. Is it installed? (brew install scrcpy)");
     }
   }

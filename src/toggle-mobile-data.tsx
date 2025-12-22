@@ -35,10 +35,10 @@ function MobileDataControl({ device }: { device: Device }) {
       toast.style = Toast.Style.Success;
       toast.title = enable ? "Data Enabled" : "Data Disabled";
       revalidate();
-    } catch (e: any) {
+    } catch (e: unknown) {
       toast.style = Toast.Style.Failure;
       toast.title = "Failed";
-      toast.message = e.message;
+      toast.message = e instanceof Error ? e.message : String(e);
     }
   }
 
