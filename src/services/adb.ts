@@ -157,36 +157,48 @@ class AdbService {
   }
   async listAVDs(): Promise<string[]> {
     try {
-      const emulator = await this.getEmulator();
-      await this.exec(`-s emulator-5554 shell echo "ignore" && "${emulator}" -list-avds`);
-      // Fallback to searching basic paths if command above fails or weirdness.
-      // Actually, 'emulator' might not be in path for exec, we need full path usually.
-      // But for now let's hope it's in path or we use the specific path.
-      // Better: Use checkAdb-like logic to find emulator binary?
-      // For simplify, start with assuming 'emulator' is in path or standard location.
-      const res = await this.exec(`"${emulator}" -list-avds`);
-      return res.split("\n").filter((l) => l.trim().length > 0);
+      const { stdout } = await execAsync(`$HOME/Library/Android/sdk/emulator/emulator -list-avds`);
+      return stdout.split("\n").filter((l) => l.trim().length > 0);
     } catch {
-      // Try just 'emulator'
       try {
-        const res = await this.exec(`emulator -list-avds`);
-        return res.split("\n").filter((l) => l.trim().length > 0);
+        const { stdout } = await execAsync(`emulator -list-avds`);
+        return stdout.split("\n").filter((l) => l.trim().length > 0);
       } catch {
         return [];
       }
     }
   }
 
-  async launchAVD(avdName: string) {
-    // -dns-server 8.8.8.8 ensures internet often works better
-    // Spawn detached process ideally, but here we just run it.
-    // Needs nohup or similar to keep running after command returns?
-    // Raycast might kill it. We'll use a detached spawn ideally, but exec waits.
-    // 'screen' or 'nohup' might be needed.
-    // Actually best to use open -a Terminal or similar?
-    // Let's try simple backgrounding `&`
-    const emulator = await this.getEmulator();
-    return await this.exec(`"${emulator}" @${avdName} &`);
+  async launchAVD(avdName: string, options?: { coldBoot?: boolean; noAudio?: boolean }) {
+    try {
+      const emulatorPath = process.env.HOME ? `${process.env.HOME}/Library/Android/sdk/emulator/emulator` : "emulator";
+      const args = [`@${avdName}`];
+
+      if (options?.coldBoot) args.push("-no-snapshot-load");
+      if (options?.noAudio) args.push("-no-audio");
+
+      const child = spawn(emulatorPath, args, {
+        detached: true,
+        stdio: "ignore",
+      });
+      child.unref();
+      return { success: true, message: "Emulator started" };
+    } catch {
+      try {
+        const args = [`@${avdName}`];
+        if (options?.coldBoot) args.push("-no-snapshot-load");
+        if (options?.noAudio) args.push("-no-audio");
+
+        const child = spawn("emulator", args, {
+          detached: true,
+          stdio: "ignore",
+        });
+        child.unref();
+        return { success: true, message: "Emulator started" };
+      } catch (e2: unknown) {
+        throw new Error(`Failed to launch emulator: ${e2 instanceof Error ? e2.message : String(e2)}`);
+      }
+    }
   }
 
   async killEmulator(deviceId: string) {
@@ -262,18 +274,39 @@ class AdbService {
   }
 
   // --- Scrcpy ---
-  async mirrorScreen(deviceId: string) {
-    // Try to find scrcpy
+  async mirrorScreen(deviceId: string, turnScreenOff: boolean = false) {
     try {
-      // We use 'scrcpy -s <id>'
-      // We need to run this so it persists.
-      // Using nohup & to detach might work best in this environment.
-      // But we need the path.
-      // Assume it's in path or brew.
-      const cmd = `scrcpy -s ${deviceId} > /dev/null 2>&1 &`;
-      return await this.exec(cmd);
+      const args = ["-s", deviceId];
+      if (turnScreenOff) {
+        args.push("--turn-screen-off");
+      }
+      const child = spawn("scrcpy", args, {
+        detached: true,
+        stdio: "ignore",
+        env: { ...process.env, PATH: `${process.env.PATH}:/opt/homebrew/bin:/usr/local/bin` },
+      });
+      child.unref();
+      return { success: true, message: "Scrcpy started" };
     } catch {
       throw new Error("Could not start scrcpy. Is it installed? (brew install scrcpy)");
+    }
+  }
+
+  async isScrcpyRunning(deviceId: string): Promise<boolean> {
+    try {
+      const { stdout } = await execAsync(`pgrep -f "scrcpy.*-s ${deviceId}"`);
+      return stdout.trim().length > 0;
+    } catch {
+      return false;
+    }
+  }
+
+  async stopScrcpy(deviceId: string) {
+    try {
+      await execAsync(`pkill -f "scrcpy.*-s ${deviceId}"`);
+      return { success: true, message: "Scrcpy stopped" };
+    } catch {
+      return { success: false, message: "Could not stop scrcpy" };
     }
   }
 
