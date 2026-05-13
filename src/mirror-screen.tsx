@@ -13,7 +13,11 @@ export default function MirrorScreen() {
     checkAdbPath().then(setAdbPath);
   }, []);
 
-  const { data: devicesWithStatus, isLoading, revalidate } = usePromise(
+  const {
+    data: devicesWithStatus,
+    isLoading,
+    revalidate,
+  } = usePromise(
     async () => {
       if (!adbPath) return [];
       const devices = await adb.listDevices();
@@ -21,11 +25,11 @@ export default function MirrorScreen() {
         devices.map(async (device) => {
           const isRunning = await adb.isScrcpyRunning(device.id);
           return { device, isRunning };
-        })
+        }),
       );
     },
     [],
-    { execute: !!adbPath }
+    { execute: !!adbPath },
   );
 
   if (!adbPath) {
@@ -43,10 +47,10 @@ export default function MirrorScreen() {
       toast.title = "Mirroring Started";
       toast.message = turnScreenOff ? "Screen is off." : "Check for the Scrcpy window.";
       setTimeout(revalidate, 1000);
-    } catch (e: any) {
+    } catch (e: unknown) {
       toast.style = Toast.Style.Failure;
       toast.title = "Failed";
-      toast.message = e.message;
+      toast.message = e instanceof Error ? e.message : String(e);
     }
   }
 
@@ -57,7 +61,7 @@ export default function MirrorScreen() {
       toast.style = Toast.Style.Success;
       toast.title = "Mirroring Stopped";
       revalidate();
-    } catch (e: any) {
+    } catch (e: unknown) {
       toast.style = Toast.Style.Failure;
       toast.title = "Failed";
       toast.message = e instanceof Error ? e.message : String(e);
@@ -82,7 +86,12 @@ export default function MirrorScreen() {
                     style={Action.Style.Destructive}
                     onAction={() => stopMirror(device)}
                   />
-                  <Action title="Refresh Status" icon={Icon.ArrowClockwise} onAction={revalidate} shortcut={{ modifiers: ["cmd"], key: "r" }} />
+                  <Action
+                    title="Refresh Status"
+                    icon={Icon.ArrowClockwise}
+                    onAction={revalidate}
+                    shortcut={{ modifiers: ["cmd"], key: "r" }}
+                  />
                 </ActionPanel>
               }
             />
@@ -100,18 +109,19 @@ export default function MirrorScreen() {
               icon={device.type === "emulator" ? Icon.Monitor : Icon.Mobile}
               actions={
                 <ActionPanel>
+                  <Action title="Start Mirroring" icon={Icon.Play} onAction={() => startMirror(device, false)} />
                   <Action
-                    title="Start Mirroring"
-                    icon={Icon.Play}
-                    onAction={() => startMirror(device, false)}
-                  />
-                  <Action
-                    title="Start with Screen Off"
+                    title="Start with Screen off"
                     icon={Icon.Power}
                     shortcut={{ modifiers: ["cmd"], key: "enter" }}
                     onAction={() => startMirror(device, true)}
                   />
-                  <Action title="Refresh Status" icon={Icon.ArrowClockwise} onAction={revalidate} shortcut={{ modifiers: ["cmd"], key: "r" }} />
+                  <Action
+                    title="Refresh Status"
+                    icon={Icon.ArrowClockwise}
+                    onAction={revalidate}
+                    shortcut={{ modifiers: ["cmd"], key: "r" }}
+                  />
                 </ActionPanel>
               }
             />

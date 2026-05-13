@@ -159,11 +159,11 @@ class AdbService {
     try {
       const { stdout } = await execAsync(`$HOME/Library/Android/sdk/emulator/emulator -list-avds`);
       return stdout.split("\n").filter((l) => l.trim().length > 0);
-    } catch (e) {
+    } catch {
       try {
         const { stdout } = await execAsync(`emulator -list-avds`);
         return stdout.split("\n").filter((l) => l.trim().length > 0);
-      } catch (e2) {
+      } catch {
         return [];
       }
     }
@@ -171,9 +171,9 @@ class AdbService {
 
   async launchAVD(avdName: string, options?: { coldBoot?: boolean; noAudio?: boolean }) {
     try {
-      const emulatorPath = process.env.HOME ? `${process.env.HOME}/Library/Android/sdk/emulator/emulator` : 'emulator';
+      const emulatorPath = process.env.HOME ? `${process.env.HOME}/Library/Android/sdk/emulator/emulator` : "emulator";
       const args = [`@${avdName}`];
-      
+
       if (options?.coldBoot) args.push("-no-snapshot-load");
       if (options?.noAudio) args.push("-no-audio");
 
@@ -183,20 +183,20 @@ class AdbService {
       });
       child.unref();
       return { success: true, message: "Emulator started" };
-    } catch (e: any) {
+    } catch {
       try {
         const args = [`@${avdName}`];
         if (options?.coldBoot) args.push("-no-snapshot-load");
         if (options?.noAudio) args.push("-no-audio");
 
-        const child = spawn('emulator', args, {
+        const child = spawn("emulator", args, {
           detached: true,
           stdio: "ignore",
         });
         child.unref();
         return { success: true, message: "Emulator started" };
-      } catch (e2: any) {
-        throw new Error(`Failed to launch emulator: ${e2.message}`);
+      } catch (e2: unknown) {
+        throw new Error(`Failed to launch emulator: ${e2 instanceof Error ? e2.message : String(e2)}`);
       }
     }
   }
@@ -283,11 +283,11 @@ class AdbService {
       const child = spawn("scrcpy", args, {
         detached: true,
         stdio: "ignore",
-        env: { ...process.env, PATH: `${process.env.PATH}:/opt/homebrew/bin:/usr/local/bin` }
+        env: { ...process.env, PATH: `${process.env.PATH}:/opt/homebrew/bin:/usr/local/bin` },
       });
       child.unref();
       return { success: true, message: "Scrcpy started" };
-    } catch (e) {
+    } catch {
       throw new Error("Could not start scrcpy. Is it installed? (brew install scrcpy)");
     }
   }
@@ -296,7 +296,7 @@ class AdbService {
     try {
       const { stdout } = await execAsync(`pgrep -f "scrcpy.*-s ${deviceId}"`);
       return stdout.trim().length > 0;
-    } catch (e) {
+    } catch {
       return false;
     }
   }
@@ -305,7 +305,7 @@ class AdbService {
     try {
       await execAsync(`pkill -f "scrcpy.*-s ${deviceId}"`);
       return { success: true, message: "Scrcpy stopped" };
-    } catch (e) {
+    } catch {
       return { success: false, message: "Could not stop scrcpy" };
     }
   }

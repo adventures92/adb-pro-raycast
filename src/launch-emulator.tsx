@@ -29,22 +29,18 @@ export default function LaunchEmulator() {
           icon={Icon.Mobile}
           actions={
             <ActionPanel>
-              <Action 
-                title="Launch Emulator" 
-                icon={Icon.Play} 
-                onAction={() => launch(avd)} 
-              />
-              <Action 
-                title="Cold Boot Emulator" 
-                icon={Icon.Bolt} 
+              <Action title="Launch Emulator" icon={Icon.Play} onAction={() => launch(avd)} />
+              <Action
+                title="Cold Boot Emulator"
+                icon={Icon.Bolt}
                 shortcut={{ modifiers: ["cmd"], key: "enter" }}
-                onAction={() => launch(avd, { coldBoot: true })} 
+                onAction={() => launch(avd, { coldBoot: true })}
               />
-              <Action 
-                title="Launch Without Audio" 
-                icon={Icon.SpeakerOff} 
+              <Action
+                title="Launch Without Audio"
+                icon={Icon.SpeakerOff}
                 shortcut={{ modifiers: ["cmd", "shift"], key: "a" }}
-                onAction={() => launch(avd, { noAudio: true })} 
+                onAction={() => launch(avd, { noAudio: true })}
               />
             </ActionPanel>
           }
